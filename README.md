@@ -178,11 +178,6 @@ Algorithm Heapify(A, N, i):                 // ensures subtree rooted at i is a 
         Heapify(A, N, largest)              // recursively heapify the affected subtree
 ```
 
-### Steps
-1. Generate N random integers and write them to an input file (`input.txt`).
-2. Read the N elements from the file into an array.
-3. Apply `HeapSort` on the array in-place.
-4. Write the sorted array to an output file (`output.txt`).
 
 ### Complexity Analysis
 
