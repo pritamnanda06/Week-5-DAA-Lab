@@ -1,6 +1,14 @@
+/*
+ * DAA LAB-5, Q2
+ * Find the K'th smallest element of a list of N numbers WITHOUT sorting the list.
+ * Approach: Quickselect (based on Quicksort partitioning)
+ *
+ * Time Complexity : Best/Average - O(N), Worst - O(N^2)
+ * Space Complexity: O(1) extra (iterative partition) + O(log N) avg recursion stack
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 /* Swap two elements */
 void swap(int *a, int *b) {
@@ -49,18 +57,15 @@ int quickSelect(int A[], int low, int high, int k) {
 }
 
 /*
- * Finds median of array A of size N without fully sorting it.
+ * Finds the K'th smallest element of array A of size N (K is 1-indexed).
+ * Returns the element, or exits with an error message if K is invalid.
  */
-double findMedian(int A[], int N) {
-    if (N % 2 != 0) {
-        /* Odd number of elements: single middle element */
-        return (double) quickSelect(A, 0, N - 1, N / 2);
-    } else {
-        /* Even number of elements: average of two middle elements */
-        int left  = quickSelect(A, 0, N - 1, (N / 2) - 1);
-        int right = quickSelect(A, 0, N - 1, N / 2);
-        return (left + right) / 2.0;
+int kthSmallest(int A[], int N, int K) {
+    if (K < 1 || K > N) {
+        printf("Invalid value of K. K must be between 1 and %d.\n", N);
+        exit(1);
     }
+    return quickSelect(A, 0, N - 1, K - 1);   /* convert K to 0-indexed rank */
 }
 
 /* Utility function to print an array */
@@ -71,7 +76,7 @@ void printArray(int A[], int N) {
 }
 
 int main() {
-    int N;
+    int N, K;
 
     printf("Enter number of elements (N): ");
     scanf("%d", &N);
@@ -86,14 +91,17 @@ int main() {
     for (int i = 0; i < N; i++)
         scanf("%d", &A[i]);
 
+    printf("Enter the value of K (1 to %d): ", N);
+    scanf("%d", &K);
+
     printf("\nOriginal array: ");
     printArray(A, N);
 
     /* NOTE: quickSelect rearranges (partially permutes) the array in-place,
        since partitioning swaps elements. This is expected for this method. */
-    double median = findMedian(A, N);
+    int result = kthSmallest(A, N, K);
 
-    printf("Median = %.2f\n", median);
+    printf("%d'th smallest element = %d\n", K, result);
 
     free(A);
     return 0;
