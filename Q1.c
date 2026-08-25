@@ -1,23 +1,16 @@
+// DAA LAB-5, Q1 - Median WITHOUT sorting (Quickselect)
+// Time: Best/Avg O(N), Worst O(N^2) | Space: O(1) + O(log N) avg recursion
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-/* Swap two elements */
 void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int t = *a; *a = *b; *b = t;
 }
 
-/*
- * Partition function (Lomuto partition scheme)
- * Places pivot (last element) at its correct sorted position,
- * with smaller elements to its left and larger elements to its right.
- * Returns the final index of the pivot.
- */
+// Lomuto partition - places pivot at correct sorted position
 int partition(int A[], int low, int high) {
-    int pivot = A[high];
-    int i = low - 1;
+    int pivot = A[high], i = low - 1;
 
     for (int j = low; j < high; j++) {
         if (A[j] <= pivot) {
@@ -29,58 +22,37 @@ int partition(int A[], int low, int high) {
     return i + 1;
 }
 
-/*
- * QuickSelect function
- * Finds the element that would be at index k (0-indexed) if the array were sorted,
- * WITHOUT sorting the entire array.
- */
+// Finds element at 0-indexed rank k without sorting the whole array
 int quickSelect(int A[], int low, int high, int k) {
-    if (low == high)
-        return A[low];
+    if (low == high) return A[low];
 
-    int pivotIndex = partition(A, low, high);
+    int p = partition(A, low, high);
 
-    if (k == pivotIndex)
-        return A[k];
-    else if (k < pivotIndex)
-        return quickSelect(A, low, pivotIndex - 1, k);
-    else
-        return quickSelect(A, pivotIndex + 1, high, k);
+    if (k == p) return A[k];
+    if (k < p)  return quickSelect(A, low, p - 1, k);
+    return quickSelect(A, p + 1, high, k);
 }
 
-/*
- * Finds median of array A of size N without fully sorting it.
- */
 double findMedian(int A[], int N) {
-    if (N % 2 != 0) {
-        /* Odd number of elements: single middle element */
-        return (double) quickSelect(A, 0, N - 1, N / 2);
-    } else {
-        /* Even number of elements: average of two middle elements */
-        int left  = quickSelect(A, 0, N - 1, (N / 2) - 1);
-        int right = quickSelect(A, 0, N - 1, N / 2);
-        return (left + right) / 2.0;
-    }
+    if (N % 2 != 0)
+        return quickSelect(A, 0, N - 1, N / 2);
+
+    int left  = quickSelect(A, 0, N - 1, N / 2 - 1);
+    int right = quickSelect(A, 0, N - 1, N / 2);
+    return (left + right) / 2.0;
 }
 
-/* Utility function to print an array */
 void printArray(int A[], int N) {
-    for (int i = 0; i < N; i++)
-        printf("%d ", A[i]);
+    for (int i = 0; i < N; i++) printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
     int N;
-
-    printf("Enter number of elements (N): ");
+    printf("Enter N: ");
     scanf("%d", &N);
 
-    int *A = (int *) malloc(N * sizeof(int));
-    if (A == NULL) {
-        printf("Memory allocation failed.\n");
-        return 1;
-    }
+    int *A = malloc(N * sizeof(int));
 
     printf("Enter %d elements:\n", N);
     for (int i = 0; i < N; i++)
@@ -89,11 +61,8 @@ int main() {
     printf("\nOriginal array: ");
     printArray(A, N);
 
-    /* NOTE: quickSelect rearranges (partially permutes) the array in-place,
-       since partitioning swaps elements. This is expected for this method. */
-    double median = findMedian(A, N);
-
-    printf("Median = %.2f\n", median);
+    // quickSelect partially rearranges A in-place; that's expected
+    printf("Median = %.2f\n", findMedian(A, N));
 
     free(A);
     return 0;
