@@ -150,4 +150,48 @@ Algorithm Partition(A, low, high):
 For Q4
 ------
 
+### Algorithm
+
+```
+Algorithm HeapSort(A, N):
+    BuildMaxHeap(A, N)                      // Step 1: build max-heap
+    for i = N-1 downto 1:
+        swap(A[0], A[i])                    // move current max to the end
+        Heapify(A, i, 0)                    // restore heap property on reduced heap
+
+Algorithm BuildMaxHeap(A, N):
+    for i = (N/2) - 1 downto 0:
+        Heapify(A, N, i)
+
+Algorithm Heapify(A, N, i):                 // ensures subtree rooted at i is a max-heap
+    largest = i
+    left  = 2*i + 1
+    right = 2*i + 2
+
+    if left < N and A[left] > A[largest]:
+        largest = left
+    if right < N and A[right] > A[largest]:
+        largest = right
+
+    if largest != i:
+        swap(A[i], A[largest])
+        Heapify(A, N, largest)              // recursively heapify the affected subtree
+```
+
+### Steps
+1. Generate N random integers and write them to an input file (`input.txt`).
+2. Read the N elements from the file into an array.
+3. Apply `HeapSort` on the array in-place.
+4. Write the sorted array to an output file (`output.txt`).
+
+### Complexity Analysis
+
+| Case | Time Complexity | Reason |
+|---|---|---|
+| Building the Heap | O(N) | Though a single `Heapify` call is O(log N), tighter analysis over all N/2 calls (most nodes are near the bottom, needing little work) sums to O(N) |
+| Best Case | O(N log N) | Extracting max and re-heapifying (O(log N)) is repeated N times regardless of input arrangement |
+| Average Case | O(N log N) | Same reasoning — heap operations are always O(log N), independent of data distribution |
+| Worst Case | O(N log N) | Unlike Quicksort, Heap Sort has **no bad-input worst case** — always N extractions × O(log N) heapify |
+| Space Complexity | O(1) extra (in-place) + O(log N) recursion stack for `Heapify` (or O(1) if implemented iteratively) | No auxiliary array needed |
+
 
