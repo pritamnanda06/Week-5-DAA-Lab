@@ -105,3 +105,11 @@ Algorithm Partition(A, low, high):
 | Worst Case | O(N²) | Poor pivot choice (e.g., sorted input with last-element pivot) eliminates only one element per step |
 | Space Complexity | O(1) extra (iterative) or O(log N) (recursive call stack, average case) | In-place partitioning |
 
+------------------------------------------------------------------------------------------------------------------------------
+
+For Q3
+------
+
+
+
+
