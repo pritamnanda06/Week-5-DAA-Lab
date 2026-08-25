@@ -110,6 +110,44 @@ Algorithm Partition(A, low, high):
 For Q3
 ------
 
+### Algorithm
 
+```
+Algorithm QuickSort(A, low, high):
+    if low < high:
+        pivotIndex = Partition(A, low, high)
+        QuickSort(A, low, pivotIndex - 1)      // sort left sub-array
+        QuickSort(A, pivotIndex + 1, high)     // sort right sub-array
+
+Algorithm Partition(A, low, high):
+    pivot = A[high]              // choose last element as pivot
+    i = low - 1
+    for j = low to high - 1:
+        if A[j] <= pivot:
+            i = i + 1
+            swap(A[i], A[j])
+    swap(A[i+1], A[high])
+    return i + 1                 // final position of pivot
+```
+
+### Steps
+1. Generate N random integers and write them to an input file (`input.txt`).
+2. Read the N elements from the file into an array.
+3. Apply `QuickSort` on the array in-place.
+4. Write the sorted array to an output file (`output.txt`).
+
+### Complexity Analysis
+
+| Case | Time Complexity | Reason |
+|---|---|---|
+| Best Case | O(N log N) | Pivot always splits array into two roughly equal halves: T(N) = 2T(N/2) + O(N) |
+| Average Case | O(N log N) | On random data, partitions are balanced on average |
+| Worst Case | O(N²) | Pivot is always the smallest/largest element (e.g., sorted/reverse-sorted input), giving unbalanced partitions: T(N) = T(N-1) + O(N) |
+| Space Complexity | O(log N) average, O(N) worst case | Recursive call stack depth (in-place partitioning, no extra array needed) |
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+For Q4
+------
 
 
