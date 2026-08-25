@@ -47,3 +47,61 @@ Unlike Quicksort, we discard one half every time instead of recursing into both 
 | Space Complexity | O(1) extra (iterative) or O(log N) (recursive call stack, average case) | In-place partitioning |
     swap(A[i+1], A[high])
     return i + 1                 // final position of pivot
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+For Q2
+------
+
+### Algorithm
+
+```
+Algorithm KthSmallest(A, N, K):
+    // K is 1-indexed (1st smallest, 2nd smallest, ... )
+    if K < 1 or K > N:
+        return "Invalid K"
+    return QuickSelect(A, 0, N-1, K-1)     // convert to 0-indexed rank
+
+Algorithm QuickSelect(A, low, high, k):    // k = 0-indexed rank we want
+    if low == high:
+        return A[low]
+
+    pivotIndex = Partition(A, low, high)
+
+    if k == pivotIndex:
+        return A[k]
+    else if k < pivotIndex:
+        return QuickSelect(A, low, pivotIndex - 1, k)
+    else:
+        return QuickSelect(A, pivotIndex + 1, high, k)
+
+Algorithm Partition(A, low, high):
+    pivot = A[high]              // choose last element as pivot
+    i = low - 1
+    for j = low to high - 1:
+        if A[j] <= pivot:
+            i = i + 1
+            swap(A[i], A[j])
+    swap(A[i+1], A[high])
+    return i + 1                 // final position of pivot
+```
+
+### How it Works
+- `Partition` places the pivot at its correct sorted position, with all smaller 
+  elements to its left and all larger elements to its right — without sorting 
+  the rest of the array.
+- Compare the pivot's final index to the target rank `k`:
+  - If equal → pivot **is** the K'th smallest element, return it.
+  - If `k` is smaller → recurse only on the **left** sub-array.
+  - If `k` is larger → recurse only on the **right** sub-array.
+- Only one half of the array is explored at each step, so we never need to 
+  sort the entire list.
+
+### Complexity Analysis
+
+| Case | Time Complexity | Reason |
+|---|---|---|
+| Best/Average Case | O(N) | Search space roughly halves each partition step: T(N) = T(N/2) + O(N) → O(N) |
+| Worst Case | O(N²) | Poor pivot choice (e.g., sorted input with last-element pivot) eliminates only one element per step |
+| Space Complexity | O(1) extra (iterative) or O(log N) (recursive call stack, average case) | In-place partitioning |
+
